@@ -4,12 +4,13 @@ import java.util.List;
 import java.util.function.Function;
 
 public class FibonacciSearch {
-    private static final List<Integer> FIBONACCI_SEQUENCE = List.of(1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144);
 
-    public Double minimize(Function<Double, Double> f, Interval initialSearchInterval) {
+    public Double minimize(Function<Double, Double> f, Interval initialSearchInterval, Double accuracy) {
+        Double reductionRatio = computeReductionRatio(initialSearchInterval, accuracy);
+        int leastFibonacciForReductionRatio = computeLeastFibonacciForReductionRatio(reductionRatio);
         Interval currentInterval = initialSearchInterval;
         InteriorPoints interiorPoints;
-        for (int i = FIBONACCI_SEQUENCE.size() - 1; i > 1; i--) {
+        for (int i = leastFibonacciForReductionRatio; i >= 3; i--) {
             interiorPoints = computeInteriorPoints(currentInterval, i);
             Double fx1 = f.apply(interiorPoints.lower());
             Double fx2 = f.apply(interiorPoints.upper());
@@ -23,11 +24,42 @@ public class FibonacciSearch {
         return (currentInterval.start() + currentInterval.end())/2;
     }
 
+    private static int computeLeastFibonacciForReductionRatio(Double reductionRatio) {
+        int currentFibonacciIndex = 0;
+        while(true) {
+            int currentFibonacci = computeNthFibonacci(currentFibonacciIndex);
+            if (currentFibonacci >= reductionRatio)
+                return currentFibonacciIndex;
+            currentFibonacciIndex++;
+        }
+    }
+
+    private static int computeNthFibonacci(int n) {
+        if (n == 0)
+            return 0;
+        if (n == 1)
+            return 1;
+        int a =  0;
+        int b = 1;
+        int result = 0;
+        for (int i = 0; i <= n-2; i++) {
+            result = a + b;
+            a = b;
+            b = result;
+        }
+        return result;
+    }
+
+    private static Double computeReductionRatio(Interval initialSearchInterval, Double accuracy) {
+        Double finalIntervalLength = accuracy*2;
+        return initialSearchInterval.length()/finalIntervalLength;
+    }
+
     private static InteriorPoints computeInteriorPoints(Interval currentInterval, int fibIndex) {
         InteriorPoints interiorPoints;
-        Integer fibN = FIBONACCI_SEQUENCE.get(fibIndex);
-        Integer fibNMinusOne = FIBONACCI_SEQUENCE.get(fibIndex -1);
-        Integer fibNMinusTwo = FIBONACCI_SEQUENCE.get(fibIndex -2);
+        Integer fibN = computeNthFibonacci(fibIndex);
+        Integer fibNMinusOne = computeNthFibonacci(fibIndex -1);
+        Integer fibNMinusTwo = computeNthFibonacci(fibIndex -2);
         Double r1 = (double)fibNMinusTwo / fibN;
         Double r2 = (double)fibNMinusOne / fibN;
         interiorPoints = new InteriorPoints(

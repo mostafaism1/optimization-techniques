@@ -18,17 +18,17 @@ public class FibonacciSearchAcceptanceTest {
     @DisplayName("Single Variable Objective Minimization")
     @ParameterizedTest
     @MethodSource("singleVariableUniModalFunctions")
-    void singleVariableMinimization(Function<Double, Double> singleVariableUniModalFunction, Interval searchInterval, Double expectedMinimizer) {
+    void singleVariableMinimization(Function<Double, Double> singleVariableUniModalFunction, Interval searchInterval, Double accuracy, Double expectedMinimizer) {
         FibonacciSearch fibonacciSearch = new FibonacciSearch();
-        Double actualMinimizer = fibonacciSearch.minimize(singleVariableUniModalFunction, searchInterval);
-        assertEquals(expectedMinimizer, actualMinimizer, 0.1);
+        Double actualMinimizer = fibonacciSearch.minimize(singleVariableUniModalFunction, searchInterval, accuracy);
+        assertEquals(expectedMinimizer, actualMinimizer, accuracy);
     }
 
     private static Stream<Arguments> singleVariableUniModalFunctions() {
         return Stream.of(
-                Arguments.of((Function<Double, Double>) ((Double x) -> Math.pow(x, 2)), new Interval(-10.0, 10.0), 0.0),
-                Arguments.of((Function<Double, Double>) ((Double x) -> Math.pow(x-1, 2)), new Interval(-10.0, 10.0), 1.0),
-                Arguments.of((Function<Double, Double>) ((Double x) -> 2*Math.pow(x, 2) - Math.log(x)), new Interval(0.0, 10.0), 0.538)
+                Arguments.of((Function<Double, Double>) ((Double x) -> Math.pow(x, 2)), new Interval(-10.0, 10.0), 0.1, 0.0),
+                Arguments.of((Function<Double, Double>) ((Double x) -> Math.pow(x-1, 2)), new Interval(-10.0, 10.0), 0.01, 1.0),
+                Arguments.of((Function<Double, Double>) ((Double x) -> 2*Math.pow(x, 2) - Math.log(x)), new Interval(0.0, 10.0), 0.1, 0.538)
         );
     }
 }
