@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 public record Point (List<Double> coordinates) {
     public Double distanceTo(Point p2) {
         Double sumOfDifferenceSquared = 0.0;
-        for (int i = coordinates.size() - 1; i >= 0; i--) {
+        for (int i = 0; i < coordinates().size() ; i++) {
             sumOfDifferenceSquared += Math.pow(p2.coordinates().get(i) - coordinates().get(i), 2);
         }
         return Math.sqrt(sumOfDifferenceSquared);
@@ -15,7 +15,7 @@ public record Point (List<Double> coordinates) {
 
     public Point add(Point p2) {
         List<Double> sumCoordinates = new ArrayList<>();
-        for (int i = coordinates.size() - 1; i >= 0; i--) {
+        for (int i = 0; i < coordinates().size() ; i++) {
             sumCoordinates.add(coordinates.get(i) + p2.coordinates().get(i));
         }
         return new Point(sumCoordinates);
@@ -30,14 +30,14 @@ public record Point (List<Double> coordinates) {
 
     public Point scale(double factor) {
         List<Double> scaledCoordinates = coordinates().stream()
-                .map(x -> x*factor)
+                .map(x -> factor*x)
                 .collect(Collectors.toList());
         return new Point(scaledCoordinates);
     }
 
     public Point negative() {
         List<Double> negativeCoordinates = coordinates().stream()
-                .map(x -> -x)
+                .map(x -> x == 0 ? 0 : -1*x)
                 .collect(Collectors.toList());
         return new Point(negativeCoordinates);
     }

@@ -4,12 +4,14 @@ import java.util.function.Function;
 
 public class FibonacciSearch {
 
+    private static final int ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION = 0;
+
     public Point minimize(Function<Point, Double> f, Interval initialSearchInterval, Double accuracy) {
         Double reductionRatio = computeReductionRatio(initialSearchInterval, accuracy);
         int leastFibonacciForReductionRatio = computeLeastFibonacciForReductionRatio(reductionRatio);
         Interval currentInterval = initialSearchInterval;
         InteriorPoints interiorPoints;
-        for (int i = leastFibonacciForReductionRatio; i >= 3; i--) {
+        for (int i = leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION; i >= 3; i--) {
             interiorPoints = computeInteriorPoints(currentInterval, i);
             Double fx1 = f.apply(interiorPoints.lower());
             Double fx2 = f.apply(interiorPoints.upper());
@@ -55,13 +57,12 @@ public class FibonacciSearch {
     }
 
     private static InteriorPoints computeInteriorPoints(Interval currentInterval, int fibIndex) {
-        InteriorPoints interiorPoints;
         Integer fibN = computeNthFibonacci(fibIndex);
         Integer fibNMinusOne = computeNthFibonacci(fibIndex -1);
         Integer fibNMinusTwo = computeNthFibonacci(fibIndex -2);
         Double r1 = (double)fibNMinusTwo / fibN;
         Double r2 = (double)fibNMinusOne / fibN;
-        interiorPoints = new InteriorPoints(
+        InteriorPoints interiorPoints = new InteriorPoints(
                 currentInterval.start().add(currentInterval.end().add(currentInterval.start().negative()).scale(r1)),
                 currentInterval.start().add(currentInterval.end().add(currentInterval.start().negative()).scale(r2))
         );
