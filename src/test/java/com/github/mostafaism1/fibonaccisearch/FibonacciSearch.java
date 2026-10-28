@@ -5,15 +5,15 @@ import java.util.function.Function;
 
 public class FibonacciSearch {
 
-    public Double minimize(Function<Double, Double> f, Interval initialSearchInterval, Double accuracy) {
+    public Double minimize(Function<List<Double>, Double> f, Interval initialSearchInterval, Double accuracy) {
         Double reductionRatio = computeReductionRatio(initialSearchInterval, accuracy);
         int leastFibonacciForReductionRatio = computeLeastFibonacciForReductionRatio(reductionRatio);
         Interval currentInterval = initialSearchInterval;
         InteriorPoints interiorPoints;
         for (int i = leastFibonacciForReductionRatio; i >= 3; i--) {
             interiorPoints = computeInteriorPoints(currentInterval, i);
-            Double fx1 = f.apply(interiorPoints.lower());
-            Double fx2 = f.apply(interiorPoints.upper());
+            Double fx1 = f.apply(List.of(interiorPoints.lower()));
+            Double fx2 = f.apply(List.of(interiorPoints.upper()));
             if (fx1 < fx2) {
                 currentInterval = new Interval(currentInterval.start(), interiorPoints.upper());
             }

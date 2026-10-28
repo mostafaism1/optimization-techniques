@@ -6,6 +6,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -18,7 +19,7 @@ public class FibonacciSearchAcceptanceTest {
     @DisplayName("Single Variable Objective Minimization")
     @ParameterizedTest
     @MethodSource("singleVariableUniModalFunctions")
-    void singleVariableMinimization(Function<Double, Double> singleVariableUniModalFunction, Interval searchInterval, Double accuracy, Double expectedMinimizer) {
+    void singleVariableMinimization(Function<List<Double>, Double> singleVariableUniModalFunction, Interval searchInterval, Double accuracy, Double expectedMinimizer) {
         FibonacciSearch fibonacciSearch = new FibonacciSearch();
         Double actualMinimizer = fibonacciSearch.minimize(singleVariableUniModalFunction, searchInterval, accuracy);
         assertEquals(expectedMinimizer, actualMinimizer, accuracy);
@@ -26,9 +27,9 @@ public class FibonacciSearchAcceptanceTest {
 
     private static Stream<Arguments> singleVariableUniModalFunctions() {
         return Stream.of(
-                Arguments.of((Function<Double, Double>) ((Double x) -> Math.pow(x, 2)), new Interval(-10.0, 10.0), 0.001, 0.0),
-                Arguments.of((Function<Double, Double>) ((Double x) -> Math.pow(x-1, 2)), new Interval(-10.0, 10.0), 0.001, 1.0),
-                Arguments.of((Function<Double, Double>) ((Double x) -> 2*Math.pow(x, 2) - Math.log(x)), new Interval(0.0, 10.0), 0.001, 0.5)
+                Arguments.of((Function<List<Double>, Double>) ((List<Double> args) -> Math.pow(args.get(0), 2)), new Interval(-10.0, 10.0), 0.001, 0.0),
+                Arguments.of((Function<List<Double>, Double>) ((List<Double> args) -> Math.pow(args.get(0)-1, 2)), new Interval(-10.0, 10.0), 0.001, 1.0),
+                Arguments.of((Function<List<Double>, Double>) ((List<Double> args) -> 2*Math.pow(args.get(0), 2) - Math.log(args.get(0))), new Interval(0.0, 10.0), 0.001, 0.5)
         );
     }
 }
