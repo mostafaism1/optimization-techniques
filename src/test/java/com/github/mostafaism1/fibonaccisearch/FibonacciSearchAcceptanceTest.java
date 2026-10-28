@@ -26,14 +26,15 @@ public class FibonacciSearchAcceptanceTest {
         assertTrue(error <= accuracy);
     }
 
-//    @DisplayName("Multi Variable Objective Minimization")
-//    @ParameterizedTest
-//    @MethodSource("multiVariableUniModalFunctions")
-//    void multiVariableMinimization(Function<List<Double>, Double> multiVariableUniModalFunction, Interval searchInterval, Double accuracy, Double expectedMinimizer) {
-//        FibonacciSearch fibonacciSearch = new FibonacciSearch();
-//        Double actualMinimizer = fibonacciSearch.minimize(multiVariableUniModalFunction, searchInterval, accuracy);
-//        assertEquals(expectedMinimizer, actualMinimizer, accuracy);
-//    }
+    @DisplayName("Multi Variable Objective Minimization")
+    @ParameterizedTest
+    @MethodSource("multiVariableUniModalFunctions")
+    void multiVariableMinimization(Function<Point, Double> multiVariableUniModalFunction, Interval searchInterval, Double accuracy, Point expectedMinimizer) {
+        FibonacciSearch fibonacciSearch = new FibonacciSearch();
+        Point actualMinimizer = fibonacciSearch.minimize(multiVariableUniModalFunction, searchInterval, accuracy);
+        Double error = actualMinimizer.distanceTo(expectedMinimizer);
+        assertTrue(error <= accuracy);
+    }
 
     private static Stream<Arguments> singleVariableUniModalFunctions() {
         return Stream.of(
@@ -45,11 +46,16 @@ public class FibonacciSearchAcceptanceTest {
 
     public static Stream<Arguments> multiVariableUniModalFunctions() {
         return Stream.of(
-                Arguments.of((Function<List<Double>, Double>) ((List<Double> args) -> {
-                    Double x = args.get(0);
-                    Double y = args.get(1);
+                Arguments.of((Function<Point, Double>) ((Point p) -> {
+                    Double x = p.coordinates().get(0);
+                    Double y = p.coordinates().get(1);
                     return Math.pow(x, 2) + Math.pow(y, 2);
-                }), new Interval(new Point(List.of(-1.0, -1.0)), new Point(List.of(1.0, 1.0))), 0.001, 0.0)
+                }), new Interval(new Point(List.of(-10.0, -10.0)), new Point(List.of(10.0, 10.0))), 0.001, new Point(List.of(0.0, 0.0))),
+                Arguments.of((Function<Point, Double>) ((Point p) -> {
+                    Double x = p.coordinates().get(0);
+                    Double y = p.coordinates().get(1);
+                    return Math.pow(x-1, 2) + Math.pow(y-1, 2);
+                }), new Interval(new Point(List.of(-10.0, -10.0)), new Point(List.of(10.0, 10.0))), 0.001, new Point(List.of(1.0, 1.0)))
         );
     }
 }
