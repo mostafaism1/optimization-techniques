@@ -26,9 +26,9 @@ public class FibonacciSearchAcceptanceTest {
 
     private static Stream<Arguments> singleVariableUniModalFunctions() {
         return Stream.of(
-                Arguments.of((Function<Double, Double>) ((Double x) -> Math.pow(x, 2)), new Interval(-10.0, 10.0), 0.1, 0.0),
-                Arguments.of((Function<Double, Double>) ((Double x) -> Math.pow(x-1, 2)), new Interval(-10.0, 10.0), 0.01, 1.0),
-                Arguments.of((Function<Double, Double>) ((Double x) -> 2*Math.pow(x, 2) - Math.log(x)), new Interval(0.0, 10.0), 0.1, 0.538)
+                Arguments.of((Function<Double, Double>) ((Double x) -> Math.pow(x, 2)), new Interval(-10.0, 10.0), 0.001, 0.0),
+                Arguments.of((Function<Double, Double>) ((Double x) -> Math.pow(x-1, 2)), new Interval(-10.0, 10.0), 0.001, 1.0),
+                Arguments.of((Function<Double, Double>) ((Double x) -> 2*Math.pow(x, 2) - Math.log(x)), new Interval(0.0, 10.0), 0.001, 0.5)
         );
     }
 }
