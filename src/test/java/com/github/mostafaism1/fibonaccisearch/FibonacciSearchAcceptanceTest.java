@@ -17,16 +17,17 @@ public class FibonacciSearchAcceptanceTest {
 
     @ParameterizedTest
     @MethodSource("singleVariableUniModalFunctions")
-    void singleVariableMinimization(Function<Double, Double> singleVariableUniModalFunction, Double expectedMinimizer) {
+    void singleVariableMinimization(Function<Double, Double> singleVariableUniModalFunction, Interval searchInterval, Double expectedMinimizer) {
         FibonacciSearch fibonacciSearch = new FibonacciSearch();
-        Double actualMinimizer = fibonacciSearch.minimize(singleVariableUniModalFunction, new Interval(-10.0, 10.0));
+        Double actualMinimizer = fibonacciSearch.minimize(singleVariableUniModalFunction, searchInterval);
         assertEquals(expectedMinimizer, actualMinimizer, 0.1);
     }
 
     private static Stream<Arguments> singleVariableUniModalFunctions() {
         return Stream.of(
-                Arguments.of((Function<Double, Double>) ((Double x) -> x*x), 0.0),
-                Arguments.of((Function<Double, Double>) ((Double x) -> (x-1)*(x-1)), 1.0)
+                Arguments.of((Function<Double, Double>) ((Double x) -> x*x), new Interval(-10.0, 10.0), 0.0),
+                Arguments.of((Function<Double, Double>) ((Double x) -> (x-1)*(x-1)), new Interval(-10.0, 10.0), 1.0)
+//                Arguments.of((Function<Double, Double>) ((Double x) -> 2*x*x - Math.log(x)), 0.538)
         );
     }
 }
