@@ -10,7 +10,7 @@ public record Interval (Point start, Point end) {
         return start.distanceTo(end);
     }
 
-    public List<Double> averagePoint() {
-        return start.add(end).midPoint().coordinates();
+    public Point averagePoint() {
+        return start.add(end).midPoint();
     }
 }

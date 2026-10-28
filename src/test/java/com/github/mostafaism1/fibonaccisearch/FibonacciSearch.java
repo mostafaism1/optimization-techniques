@@ -1,11 +1,10 @@
 package com.github.mostafaism1.fibonaccisearch;
 
-import java.util.List;
 import java.util.function.Function;
 
 public class FibonacciSearch {
 
-    public List<Double> minimize(Function<Point, Double> f, Interval initialSearchInterval, Double accuracy) {
+    public Point minimize(Function<Point, Double> f, Interval initialSearchInterval, Double accuracy) {
         Double reductionRatio = computeReductionRatio(initialSearchInterval, accuracy);
         int leastFibonacciForReductionRatio = computeLeastFibonacciForReductionRatio(reductionRatio);
         Interval currentInterval = initialSearchInterval;

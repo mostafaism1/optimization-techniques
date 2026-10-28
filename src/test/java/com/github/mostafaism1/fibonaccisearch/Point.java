@@ -6,11 +6,11 @@ import java.util.stream.Collectors;
 
 public record Point (List<Double> coordinates) {
     public Double distanceTo(Point p2) {
-        Double result = 0.0;
+        Double sumOfDifferenceSquared = 0.0;
         for (int i = coordinates.size() - 1; i >= 0; i--) {
-            result += Math.pow(p2.coordinates().get(i) - coordinates().get(i), 2);
+            sumOfDifferenceSquared += Math.pow(p2.coordinates().get(i) - coordinates().get(i), 2);
         }
-        return result;
+        return Math.sqrt(sumOfDifferenceSquared);
     }
 
     public Point add(Point p2) {

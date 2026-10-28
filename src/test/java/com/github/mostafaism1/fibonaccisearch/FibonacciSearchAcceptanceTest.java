@@ -19,10 +19,11 @@ public class FibonacciSearchAcceptanceTest {
     @DisplayName("Single Variable Objective Minimization")
     @ParameterizedTest
     @MethodSource("singleVariableUniModalFunctions")
-    void singleVariableMinimization(Function<Point, Double> singleVariableUniModalFunction, Interval searchInterval, Double accuracy, Double expectedMinimizer) {
+    void singleVariableMinimization(Function<Point, Double> singleVariableUniModalFunction, Interval searchInterval, Double accuracy, Point expectedMinimizer) {
         FibonacciSearch fibonacciSearch = new FibonacciSearch();
-        Double actualMinimizer = fibonacciSearch.minimize(singleVariableUniModalFunction, searchInterval, accuracy).get(0);
-        assertEquals(expectedMinimizer, actualMinimizer, accuracy);
+        Point actualMinimizer = fibonacciSearch.minimize(singleVariableUniModalFunction, searchInterval, accuracy);
+        Double error = actualMinimizer.distanceTo(expectedMinimizer);
+        assertTrue(error <= accuracy);
     }
 
 //    @DisplayName("Multi Variable Objective Minimization")
@@ -36,10 +37,10 @@ public class FibonacciSearchAcceptanceTest {
 
     private static Stream<Arguments> singleVariableUniModalFunctions() {
         return Stream.of(
-                Arguments.of((Function<Point, Double>) ((Point p) -> Math.pow(p.coordinates().get(0), 2)), new Interval(new Point(List.of(-10.0)), new Point(List.of(10.0))), 0.001, 0.0),
-                Arguments.of((Function<Point, Double>) ((Point p) -> Math.pow(p.coordinates().get(0)-1, 2)), new Interval(new Point(List.of(-10.0)), new Point(List.of(10.0))), 0.001, 1.0),
-                Arguments.of((Function<Point, Double>) ((Point p) -> 2*Math.pow(p.coordinates().get(0), 2) - Math.log(p.coordinates().get(0))), new Interval(new Point(List.of(0.0)), new Point(List.of(10.0))), 0.001, 0.5)
-        );
+                Arguments.of((Function<Point, Double>) ((Point p) -> Math.pow(p.coordinates().get(0), 2)), new Interval(new Point(List.of(-10.0)), new Point(List.of(10.0))), 0.001, new Point(List.of(0.0))),
+                Arguments.of((Function<Point, Double>) ((Point p) -> Math.pow(p.coordinates().get(0)-1, 2)), new Interval(new Point(List.of(-10.0)), new Point(List.of(10.0))), 0.001, new Point(List.of(1.0))),
+                Arguments.of((Function<Point, Double>) ((Point p) -> 2*Math.pow(p.coordinates().get(0), 2) - Math.log(p.coordinates().get(0))), new Interval(new Point(List.of(0.0)), new Point(List.of(10.0))), 0.001, new Point(List.of(0.5)))
+                );
     }
 
     public static Stream<Arguments> multiVariableUniModalFunctions() {
