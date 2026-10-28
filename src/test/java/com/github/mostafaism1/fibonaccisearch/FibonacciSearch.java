@@ -5,15 +5,15 @@ import java.util.function.Function;
 
 public class FibonacciSearch {
 
-    public Double minimize(Function<List<Double>, Double> f, Interval initialSearchInterval, Double accuracy) {
+    public List<Double> minimize(Function<Point, Double> f, Interval initialSearchInterval, Double accuracy) {
         Double reductionRatio = computeReductionRatio(initialSearchInterval, accuracy);
         int leastFibonacciForReductionRatio = computeLeastFibonacciForReductionRatio(reductionRatio);
         Interval currentInterval = initialSearchInterval;
         InteriorPoints interiorPoints;
         for (int i = leastFibonacciForReductionRatio; i >= 3; i--) {
             interiorPoints = computeInteriorPoints(currentInterval, i);
-            Double fx1 = f.apply(List.of(interiorPoints.lower()));
-            Double fx2 = f.apply(List.of(interiorPoints.upper()));
+            Double fx1 = f.apply(interiorPoints.lower());
+            Double fx2 = f.apply(interiorPoints.upper());
             if (fx1 < fx2) {
                 currentInterval = new Interval(currentInterval.start(), interiorPoints.upper());
             }
@@ -21,7 +21,7 @@ public class FibonacciSearch {
                 currentInterval = new Interval(interiorPoints.lower(), currentInterval.end());
             }
         }
-        return (currentInterval.start() + currentInterval.end())/2;
+        return currentInterval.averagePoint();
     }
 
     private static int computeLeastFibonacciForReductionRatio(Double reductionRatio) {
@@ -63,10 +63,11 @@ public class FibonacciSearch {
         Double r1 = (double)fibNMinusTwo / fibN;
         Double r2 = (double)fibNMinusOne / fibN;
         interiorPoints = new InteriorPoints(
-                currentInterval.start() + r1 * (currentInterval.end()- currentInterval.start()),
-                currentInterval.start() + r2 * (currentInterval.end()- currentInterval.start()));
+                currentInterval.start().add(currentInterval.end().add(currentInterval.start().negative()).scale(r1)),
+                currentInterval.start().add(currentInterval.end().add(currentInterval.start().negative()).scale(r2))
+        );
         return interiorPoints;
     }
 
-    private static record InteriorPoints(Double lower, Double upper) {}
+    private static record InteriorPoints(Point lower, Point upper) {}
 }
