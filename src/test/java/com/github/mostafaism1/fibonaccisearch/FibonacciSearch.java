@@ -5,29 +5,36 @@ import java.util.function.Function;
 
 public class FibonacciSearch {
     private static final List<Integer> FIBONACCI_SEQUENCE = List.of(1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144);
-    public Double minimize(Function<Double, Double> f) {
-        Double a = -10.0;
-        Double b = 10.0;
 
-        Double x1 = 0.0;
-        Double x2 = 0.0;
+    public Double minimize(Function<Double, Double> f, Interval initialSearchInterval) {
+        Interval currentInterval = initialSearchInterval;
+        InteriorPoints interiorPoints;
         for (int i = FIBONACCI_SEQUENCE.size() - 1; i > 1; i--) {
-            Integer fibN = FIBONACCI_SEQUENCE.get(i);
-            Integer fibNMinusOne = FIBONACCI_SEQUENCE.get(i-1);
-            Integer fibNMinusTwo = FIBONACCI_SEQUENCE.get(i-2);
-            Double r1 = (double)fibNMinusTwo / fibN;
-            Double r2 = (double)fibNMinusOne / fibN;
-            x1 = a + r1 * (b-a);
-            x2 = a + r2 * (b-a);
-            Double fx1 = f.apply(x1);
-            Double fx2 = f.apply(x2);
+            interiorPoints = computeInteriorPoints(currentInterval, i);
+            Double fx1 = f.apply(interiorPoints.lower());
+            Double fx2 = f.apply(interiorPoints.upper());
             if (fx1 < fx2) {
-                b = x2;
+                currentInterval = new Interval(currentInterval.start(), interiorPoints.upper());
             }
             if (fx1 > fx2) {
-                a = x1;
+                currentInterval = new Interval(interiorPoints.lower(), currentInterval.end());
             }
         }
-        return (x1 + x2)/2;
+        return (currentInterval.start() + currentInterval.end())/2;
     }
+
+    private static InteriorPoints computeInteriorPoints(Interval currentInterval, int fibIndex) {
+        InteriorPoints interiorPoints;
+        Integer fibN = FIBONACCI_SEQUENCE.get(fibIndex);
+        Integer fibNMinusOne = FIBONACCI_SEQUENCE.get(fibIndex -1);
+        Integer fibNMinusTwo = FIBONACCI_SEQUENCE.get(fibIndex -2);
+        Double r1 = (double)fibNMinusTwo / fibN;
+        Double r2 = (double)fibNMinusOne / fibN;
+        interiorPoints = new InteriorPoints(
+                currentInterval.start() + r1 * (currentInterval.end()- currentInterval.start()),
+                currentInterval.start() + r2 * (currentInterval.end()- currentInterval.start()));
+        return interiorPoints;
+    }
+
+    private static record InteriorPoints(Double lower, Double upper) {}
 }
