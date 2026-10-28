@@ -15,6 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @DisplayName("Fibonacci Search")
 public class FibonacciSearchAcceptanceTest {
 
+    @DisplayName("Single Variable Objective Minimization")
     @ParameterizedTest
     @MethodSource("singleVariableUniModalFunctions")
     void singleVariableMinimization(Function<Double, Double> singleVariableUniModalFunction, Interval searchInterval, Double expectedMinimizer) {
