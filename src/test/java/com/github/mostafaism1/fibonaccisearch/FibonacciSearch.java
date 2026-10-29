@@ -11,7 +11,7 @@ public class FibonacciSearch {
     static final String ROW_FORMAT =
             "%6s %12s %12s %12s %12s %14s %5s %14s%n";
 
-    public Point minimize(Function<Point, Double> f, Interval initialSearchInterval, Double accuracy) {
+    public FibonacciSearchResult minimize(Function<Point, Double> f, Interval initialSearchInterval, Double accuracy) {
         Double reductionRatio = computeReductionRatio(initialSearchInterval, accuracy);
         int leastFibonacciForReductionRatio = computeLeastFibonacciForReductionRatio(reductionRatio);
         Interval currentInterval = initialSearchInterval;
@@ -41,7 +41,7 @@ public class FibonacciSearch {
                 currentInterval = new Interval(interiorPoints.lower(), currentInterval.end());
             }
         }
-        return currentInterval.averagePoint();
+        return new FibonacciSearchResult(currentInterval.averagePoint());
     }
 
     private static int computeLeastFibonacciForReductionRatio(Double reductionRatio) {

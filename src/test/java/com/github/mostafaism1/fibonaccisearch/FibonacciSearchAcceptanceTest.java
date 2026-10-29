@@ -21,7 +21,8 @@ public class FibonacciSearchAcceptanceTest {
     @MethodSource("singleVariableUniModalFunctions")
     void singleVariableMinimization(Function<Point, Double> singleVariableUniModalFunction, Interval searchInterval, Double accuracy, Point expectedMinimizer) {
         FibonacciSearch fibonacciSearch = new FibonacciSearch();
-        Point actualMinimizer = fibonacciSearch.minimize(singleVariableUniModalFunction, searchInterval, accuracy);
+        FibonacciSearchResult result = fibonacciSearch.minimize(singleVariableUniModalFunction, searchInterval, accuracy);
+        Point actualMinimizer = result.minimizer();
         Double error = actualMinimizer.distanceTo(expectedMinimizer);
         assertEquals(accuracy, error, accuracy);
     }
@@ -31,7 +32,8 @@ public class FibonacciSearchAcceptanceTest {
     @MethodSource("multiVariableUniModalFunctions")
     void multiVariableMinimization(Function<Point, Double> multiVariableUniModalFunction, Interval searchInterval, Double accuracy, Point expectedMinimizer) {
         FibonacciSearch fibonacciSearch = new FibonacciSearch();
-        Point actualMinimizer = fibonacciSearch.minimize(multiVariableUniModalFunction, searchInterval, accuracy);
+        FibonacciSearchResult result = fibonacciSearch.minimize(multiVariableUniModalFunction, searchInterval, accuracy);
+        Point actualMinimizer = result.minimizer();
         Double error = actualMinimizer.distanceTo(expectedMinimizer);
         assertEquals(accuracy, error, accuracy);
     }
