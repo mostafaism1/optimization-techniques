@@ -32,8 +32,8 @@ public class FibonacciSearch {
                     "%s\t%s\t%s\t%s\t%s\t%.3f\t%s\t%.3f%n",
                     leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION + 1 - i,
                     currentInterval.start(),
-                    interiorPoints.lower,
-                    interiorPoints.upper,
+                    interiorPoints.lower(),
+                    interiorPoints.upper(),
                     currentInterval.end(),
                     fx1,
                     shiftRight ? "<" : ">",
@@ -94,5 +94,4 @@ public class FibonacciSearch {
         return interiorPoints;
     }
 
-    private static record InteriorPoints(Point lower, Point upper) {}
 }
