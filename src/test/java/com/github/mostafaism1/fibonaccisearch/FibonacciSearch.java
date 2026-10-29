@@ -1,5 +1,7 @@
 package com.github.mostafaism1.fibonaccisearch;
 
+import com.github.mostafaism1.fibonaccisearch.FibonacciSearchAuditRecord.FibonacciSearchIterationAuditRecord;
+
 import java.util.function.Function;
 
 public class FibonacciSearch {
@@ -17,7 +19,11 @@ public class FibonacciSearch {
         Interval currentInterval = initialSearchInterval;
         InteriorPoints interiorPoints;
         System.out.println("iteration\ta\tx_1\tx_2\tb\tfx1\tcomp\tfx2");
+        FibonacciSearchAuditRecord fibonacciSearchAuditRecord = new FibonacciSearchAuditRecord();
         for (int i = leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION; i >= 3; i--) {
+            fibonacciSearchAuditRecord.setIterationAuditRecords(
+                leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION - i,
+                new FibonacciSearchIterationAuditRecord(currentInterval));
             interiorPoints = computeInteriorPoints(currentInterval, i);
             Double fx1 = f.apply(interiorPoints.lower());
             Double fx2 = f.apply(interiorPoints.upper());
@@ -41,7 +47,7 @@ public class FibonacciSearch {
                 currentInterval = new Interval(interiorPoints.lower(), currentInterval.end());
             }
         }
-        return new FibonacciSearchResult(currentInterval.averagePoint());
+        return new FibonacciSearchResult(currentInterval.averagePoint(), fibonacciSearchAuditRecord);
     }
 
     private static int computeLeastFibonacciForReductionRatio(Double reductionRatio) {
