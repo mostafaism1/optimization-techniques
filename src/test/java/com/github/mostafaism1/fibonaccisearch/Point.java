@@ -1,10 +1,25 @@
 package com.github.mostafaism1.fibonaccisearch;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public record Point (List<Double> coordinates) {
+public class Point {
+    private final List<Double> coordinates;
+
+    public Point(Double... coordinates) {
+        this.coordinates = new ArrayList<>(Arrays.asList(coordinates));
+    }
+
+    private Point(List<Double> coordinates) {
+        this.coordinates = new ArrayList<>(coordinates);
+    }
+
+    public List<Double> coordinates() {
+        return coordinates;
+    }
+
     public Double distanceTo(Point p2) {
         Double sumOfDifferenceSquared = 0.0;
         for (int i = 0; i < coordinates().size() ; i++) {
@@ -40,6 +55,19 @@ public record Point (List<Double> coordinates) {
                 .map(x -> x == 0 ? 0 : -1*x)
                 .collect(Collectors.toList());
         return new Point(negativeCoordinates);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Point))
+            return false;
+        Point other = (Point) obj;
+        return coordinates.equals(other.coordinates);
+    }
+
+    @Override
+    public int hashCode() {
+        return this.coordinates().hashCode();
     }
 
     @Override

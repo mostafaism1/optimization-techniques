@@ -11,8 +11,8 @@ public class FibonacciSearchAuditAcceptanceTest {
 
     @Test
     public void abc() {
-        FibonacciSearchResult result = new FibonacciSearch().minimize((Function<Point, Double>) ((Point p) -> Math.pow(p.coordinates().get(0), 2)), new Interval(new Point(List.of(-10.0)), new Point(List.of(10.0))), 0.001);
+        FibonacciSearchResult result = new FibonacciSearch().minimize((Function<Point, Double>) ((Point p) -> Math.pow(p.coordinates().get(0), 2)), new Interval(new Point(-10.0), new Point(10.0)), 0.001);
         FibonacciSearchAuditRecord auditRecord = result.auditRecord();
-        assertEquals(new Point(List.of(-10.0)), auditRecord.searchIterval(0).start());
+        assertEquals(new Point(-10.0), auditRecord.searchIterval(0).start());
     }
 }
