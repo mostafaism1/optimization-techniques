@@ -41,4 +41,10 @@ public record Point (List<Double> coordinates) {
                 .collect(Collectors.toList());
         return new Point(negativeCoordinates);
     }
+
+    @Override
+    public String toString() {
+        // cover the coordinates from List<Double> to a vector representation in bracket.
+        return coordinates().stream().map(coordinate -> String.format("%.2f", coordinate)).collect(Collectors.joining(",", "(", ")"));
+    }
 }

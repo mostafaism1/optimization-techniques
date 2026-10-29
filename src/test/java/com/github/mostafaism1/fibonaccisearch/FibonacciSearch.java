@@ -5,20 +5,39 @@ import java.util.function.Function;
 public class FibonacciSearch {
 
     private static final int ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION = 0;
+    static final String HEADER_FORMAT =
+            "%6s %12s %12s %12s %12s %14s %5s %14s%n";
+
+    static final String ROW_FORMAT =
+            "%6s %12s %12s %12s %12s %14s %5s %14s%n";
 
     public Point minimize(Function<Point, Double> f, Interval initialSearchInterval, Double accuracy) {
         Double reductionRatio = computeReductionRatio(initialSearchInterval, accuracy);
         int leastFibonacciForReductionRatio = computeLeastFibonacciForReductionRatio(reductionRatio);
         Interval currentInterval = initialSearchInterval;
         InteriorPoints interiorPoints;
+        System.out.println("iteration\ta\tx_1\tx_2\tb\tfx1\tcomp\tfx2");
         for (int i = leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION; i >= 3; i--) {
             interiorPoints = computeInteriorPoints(currentInterval, i);
             Double fx1 = f.apply(interiorPoints.lower());
             Double fx2 = f.apply(interiorPoints.upper());
-            if (fx1 < fx2) {
+            boolean shiftRight = fx1 < fx2;
+            String iterationAudit = String.format(
+                    "%s\t%s\t%s\t%s\t%s\t%.3f\t%s\t%.3f%n",
+                    leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION + 1 - i,
+                    currentInterval.start(),
+                    interiorPoints.lower,
+                    interiorPoints.upper,
+                    currentInterval.end(),
+                    fx1,
+                    shiftRight ? "<" : ">",
+                    fx2
+            );
+            System.out.println(iterationAudit);
+            if (shiftRight) {
                 currentInterval = new Interval(currentInterval.start(), interiorPoints.upper());
             }
-            if (fx1 > fx2) {
+            else {
                 currentInterval = new Interval(interiorPoints.lower(), currentInterval.end());
             }
         }
