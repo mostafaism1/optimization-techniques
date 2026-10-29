@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Point {
+    private static final double EPSILON = 1e-2;
+
     private final List<Double> coordinates;
 
     public Point(Double... coordinates) {
@@ -59,15 +61,25 @@ public class Point {
 
     @Override
     public boolean equals(Object obj) {
-        if (!(obj instanceof Point))
-            return false;
+        if (this == obj) return true;
+        if (!(obj instanceof Point)) return false;
         Point other = (Point) obj;
-        return coordinates.equals(other.coordinates);
+        if (coordinates.size() != other.coordinates.size()) return false;
+        for (int i = 0; i < coordinates.size(); i++) {
+            if (Math.abs(coordinates.get(i) - other.coordinates.get(i)) > EPSILON)
+                return false;
+        }
+        return true;
     }
 
     @Override
     public int hashCode() {
-        return this.coordinates().hashCode();
+        // must be consistent with equals: round to epsilon grid
+        long hash = 1;
+        for (Double c : coordinates) {
+            hash = 31 * hash + Math.round(c / EPSILON);
+        }
+        return Long.hashCode(hash);
     }
 
     @Override
