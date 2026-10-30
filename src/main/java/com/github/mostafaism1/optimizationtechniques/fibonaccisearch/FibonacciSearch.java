@@ -1,6 +1,6 @@
-package com.github.mostafaism1.fibonaccisearch;
+package com.github.mostafaism1.optimizationtechniques.fibonaccisearch;
 
-import com.github.mostafaism1.fibonaccisearch.FibonacciSearchAuditRecord.FibonacciSearchIterationAuditRecord;
+import com.github.mostafaism1.optimizationtechniques.fibonaccisearch.FibonacciSearchAuditRecord.FibonacciSearchIterationAuditRecord;
 
 import java.util.List;
 import java.util.function.Function;

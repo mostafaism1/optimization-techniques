@@ -1,5 +1,6 @@
-package com.github.mostafaism1.fibonaccisearch;
+package com.github.mostafaism1.optimizationtechniques.acceptance.fibonaccisearch;
 
+import com.github.mostafaism1.optimizationtechniques.fibonaccisearch.*;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;

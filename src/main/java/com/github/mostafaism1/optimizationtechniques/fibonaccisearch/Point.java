@@ -1,4 +1,4 @@
-package com.github.mostafaism1.fibonaccisearch;
+package com.github.mostafaism1.optimizationtechniques.fibonaccisearch;
 
 import java.util.ArrayList;
 import java.util.Arrays;
