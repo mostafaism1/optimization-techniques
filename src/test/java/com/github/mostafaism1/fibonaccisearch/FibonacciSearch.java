@@ -2,6 +2,7 @@ package com.github.mostafaism1.fibonaccisearch;
 
 import com.github.mostafaism1.fibonaccisearch.FibonacciSearchAuditRecord.FibonacciSearchIterationAuditRecord;
 
+import java.util.List;
 import java.util.function.Function;
 
 public class FibonacciSearch {
@@ -21,13 +22,13 @@ public class FibonacciSearch {
         System.out.println("iteration\ta\tx_1\tx_2\tb\tfx1\tcomp\tfx2");
         FibonacciSearchAuditRecord fibonacciSearchAuditRecord = new FibonacciSearchAuditRecord();
         for (int i = leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION; i >= 3; i--) {
-            fibonacciSearchAuditRecord.setIterationAuditRecords(
-                leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION - i,
-                new FibonacciSearchIterationAuditRecord(currentInterval));
             interiorPoints = computeInteriorPoints(currentInterval, i);
             Double fx1 = f.apply(interiorPoints.lower());
             Double fx2 = f.apply(interiorPoints.upper());
             boolean shiftRight = fx1 < fx2;
+            fibonacciSearchAuditRecord.setIterationAuditRecords(
+                leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION - i,
+                new FibonacciSearchIterationAuditRecord(currentInterval, interiorPoints, List.of(fx1, fx2), shiftRight));
             String iterationAudit = String.format(
                     "%s\t%s\t%s\t%s\t%s\t%.3f\t%s\t%.3f%n",
                     leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION + 1 - i,
