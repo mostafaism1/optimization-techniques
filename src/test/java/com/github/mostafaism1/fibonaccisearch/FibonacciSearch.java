@@ -19,7 +19,6 @@ public class FibonacciSearch {
         int leastFibonacciForReductionRatio = computeLeastFibonacciForReductionRatio(reductionRatio);
         Interval currentInterval = initialSearchInterval;
         InteriorPoints interiorPoints;
-        System.out.println("iteration\ta\tx_1\tx_2\tb\tfx1\tcomp\tfx2");
         FibonacciSearchAuditRecord fibonacciSearchAuditRecord = new FibonacciSearchAuditRecord();
         for (int i = leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION; i >= 3; i--) {
             interiorPoints = computeInteriorPoints(currentInterval, i);
@@ -40,7 +39,6 @@ public class FibonacciSearch {
                     shiftRight ? "<" : ">",
                     fx2
             );
-            System.out.println(iterationAudit);
             if (shiftRight) {
                 currentInterval = new Interval(currentInterval.start(), interiorPoints.upper());
             }
@@ -48,6 +46,7 @@ public class FibonacciSearch {
                 currentInterval = new Interval(interiorPoints.lower(), currentInterval.end());
             }
         }
+        System.out.println(fibonacciSearchAuditRecord);
         return new FibonacciSearchResult(currentInterval.averagePoint(), fibonacciSearchAuditRecord);
     }
 
