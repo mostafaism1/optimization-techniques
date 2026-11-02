@@ -8,11 +8,6 @@ import java.util.function.Function;
 public class FibonacciSearch {
 
     private static final int ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION = 0;
-    static final String HEADER_FORMAT =
-            "%6s %12s %12s %12s %12s %14s %5s %14s%n";
-
-    static final String ROW_FORMAT =
-            "%6s %12s %12s %12s %12s %14s %5s %14s%n";
 
     public FibonacciSearchResult minimize(Function<Point, Double> f, Interval initialSearchInterval, Double accuracy) {
         Double reductionRatio = computeReductionRatio(initialSearchInterval, accuracy);
@@ -28,17 +23,6 @@ public class FibonacciSearch {
             fibonacciSearchAuditRecord.setIterationAuditRecords(
                 leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION - i,
                 new FibonacciSearchIterationAuditRecord(currentInterval, interiorPoints, List.of(fx1, fx2), shiftRight));
-            String iterationAudit = String.format(
-                    "%s\t%s\t%s\t%s\t%s\t%.3f\t%s\t%.3f%n",
-                    leastFibonacciForReductionRatio + ITERATION_BUFFER_TO_COMPENSATE_FOR_LOSSY_DOUBLE_PRECISION + 1 - i,
-                    currentInterval.start(),
-                    interiorPoints.lower(),
-                    interiorPoints.upper(),
-                    currentInterval.end(),
-                    fx1,
-                    shiftRight ? "<" : ">",
-                    fx2
-            );
             if (shiftRight) {
                 currentInterval = new Interval(currentInterval.start(), interiorPoints.upper());
             }
